@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/npm/lifecycle#readme",
   "dependencies": {
+    "byline": "^5.0.0",
     "graceful-fs": "^4.1.11",
     "slide": "^1.1.6",
     "uid-number": "0.0.6",

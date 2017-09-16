@@ -12,6 +12,7 @@ const chain = require('slide').chain
 const uidNumber = require('uid-number')
 const umask = require('umask')
 const which = require('which')
+const byline = require('byline')
 
 let PATH = 'PATH'
 
@@ -274,6 +275,7 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
   proc.on('error', procError)
   proc.on('close', function (code, signal) {
     opts.log.silly('lifecycle', logid(pkg, stage), 'Returned: code:', code, ' signal:', signal)
+    opts.log.verbose('lifecycle', logid(pkg, stage), 'close', code)
     if (signal) {
       process.kill(process.pid, signal)
     } else if (code) {
@@ -281,6 +283,12 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
       er.errno = code
     }
     procError(er)
+  })
+  byline(proc.stdout).on('data', function (data) {
+    opts.log.verbose('lifecycle', logid(pkg, stage), 'stdout', data)
+  })
+  byline(proc.stderr).on('data', function (data) {
+    opts.log.verbose('lifecycle', logid(pkg, stage), 'stderr', data)
   })
   process.once('SIGTERM', procKill)
   process.once('SIGINT', procInterupt)
