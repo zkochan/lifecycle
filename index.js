@@ -217,7 +217,8 @@ function runCmd (note, cmd, pkg, env, stage, wd, opts, cb) {
 
   if (opts.log.level !== 'silent') {
     opts.log.clearProgress()
-    console.log(note)
+    // TODO: log it?
+    // console.log(note)
     opts.log.showProgress()
   }
   opts.log.verbose('lifecycle', logid(pkg, stage), 'unsafe-perm in lifecycle', unsafe)
@@ -244,8 +245,9 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
 
   var conf = {
     cwd: wd,
-    env: env,
-    stdio: [ 0, 1, 2 ]
+    env: env
+    // TODO: pass it in using logs?
+    // stdio: [ 0, 1, 2 ]
   }
 
   if (!unsafe) {
