@@ -47,7 +47,7 @@ function lifecycle (pkg, stage, wd, opts) {
     validWd(wd || path.resolve(opts.dir, pkg.name), function (er, wd) {
       if (er) return reject(er)
 
-      if ((wd.indexOf(opts.dir) !== 0 || _incorrectWorkingDirectory(wd, pkg)) &&
+      if ((!opts.ignoreWD && (wd.indexOf(opts.dir) !== 0 || _incorrectWorkingDirectory(wd, pkg))) &&
           !opts.unsafePerm && pkg.scripts[stage]) {
         opts.log.warn('lifecycle', logid(pkg, stage), 'cannot run in wd',
           '%s %s (wd=%s)', pkg._id, pkg.scripts[stage], wd
