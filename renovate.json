@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "rangeStrategy": "auto",
+  "schedule": [
+    "on Friday",
+    "every weekend"
+  ]
+}
