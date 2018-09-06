@@ -1,5 +1,5 @@
 {
-  "name": "npm-lifecycle",
+  "name": "@zkochan/npm-lifecycle",
   "version": "2.1.0",
   "description": "JavaScript package lifecycle hook runner",
   "main": "index.js",
