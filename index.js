@@ -224,12 +224,14 @@ function dequeue () {
 }
 
 function runCmd (note, cmd, pkg, env, stage, wd, opts, cb) {
-  if (running) {
-    queue.push([note, cmd, pkg, env, stage, wd, opts, cb])
-    return
-  }
+  if (opts.runConcurrently !== true) {
+    if (running) {
+      queue.push([note, cmd, pkg, env, stage, wd, opts, cb])
+      return
+    }
 
-  running = true
+    running = true
+  }
   opts.log.pause()
   var unsafe = opts.unsafePerm
   var user = unsafe ? null : opts.user
