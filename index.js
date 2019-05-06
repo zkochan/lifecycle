@@ -23,7 +23,7 @@ let PATH = 'PATH'
 // windows calls it's path 'Path' usually, but this is not guaranteed.
 if (process.platform === 'win32') {
   PATH = 'Path'
-  Object.keys(process.env).forEach(function (e) {
+  Object.keys(process.env).forEach(e => {
     if (e.match(/^PATH$/i)) {
       PATH = e
     }
@@ -31,7 +31,7 @@ if (process.platform === 'win32') {
 }
 
 function logid (pkg, stage) {
-  return pkg._id + '~' + stage + ':'
+  return `${pkg._id}~${stage}:`
 }
 
 function hookStat (dir, stage, cb) {
@@ -39,7 +39,7 @@ function hookStat (dir, stage, cb) {
   const cachedStatError = hookStatCache.get(hook)
 
   if (cachedStatError === undefined) {
-    return fs.stat(hook, function (statError) {
+    return fs.stat(hook, statError => {
       hookStatCache.set(hook, statError)
       cb(statError)
     })
@@ -61,12 +61,12 @@ function lifecycle (pkg, stage, wd, opts) {
       delete pkg.scripts.prepublish
     }
 
-    hookStat(opts.dir, stage, function (statError) {
+    hookStat(opts.dir, stage, statError => {
       // makeEnv is a slow operation. This guard clause prevents makeEnv being called
       // and avoids a ton of unnecessary work, and results in a major perf boost.
       if (!pkg.scripts[stage] && statError) return resolve()
 
-      validWd(wd || path.resolve(opts.dir, pkg.name), function (er, wd) {
+      validWd(wd || path.resolve(opts.dir, pkg.name), (er, wd) => {
         if (er) return reject(er)
 
         if ((wd.indexOf(opts.dir) !== 0 || _incorrectWorkingDirectory(wd, pkg)) &&
@@ -76,7 +76,7 @@ function lifecycle (pkg, stage, wd, opts) {
         }
 
         // set the env variables, then run scripts as a child process.
-        var env = makeEnv(pkg, opts)
+        const env = makeEnv(pkg, opts)
         env.npm_lifecycle_event = stage
         env.npm_node_execpath = env.NODE = env.NODE || process.execPath
         env.npm_execpath = require.main.filename
@@ -101,11 +101,11 @@ function _incorrectWorkingDirectory (wd, pkg) {
 }
 
 function lifecycle_ (pkg, stage, wd, opts, env, cb) {
-  var pathArr = []
-  var p = wd.split(/[\\/]node_modules[\\/]/)
-  var acc = path.resolve(p.shift())
+  const pathArr = []
+  const p = wd.split(/[\\/]node_modules[\\/]/)
+  let acc = path.resolve(p.shift())
 
-  p.forEach(function (pp) {
+  p.forEach(pp => {
     pathArr.unshift(path.join(acc, 'node_modules', '.bin'))
     acc = path.join(acc, 'node_modules', pp)
   })
@@ -123,7 +123,7 @@ function lifecycle_ (pkg, stage, wd, opts, env, cb) {
   if (env[PATH]) pathArr.push(env[PATH])
   env[PATH] = pathArr.join(process.platform === 'win32' ? ';' : ':')
 
-  var packageLifecycle = pkg.scripts && pkg.scripts.hasOwnProperty(stage)
+  let packageLifecycle = pkg.scripts && pkg.scripts.hasOwnProperty(stage)
 
   if (opts.ignoreScripts) {
     opts.log.info('lifecycle', logid(pkg, stage), 'ignored because ignore-scripts is set to true', pkg._id)
@@ -132,7 +132,7 @@ function lifecycle_ (pkg, stage, wd, opts, env, cb) {
     // define this here so it's available to all scripts.
     env.npm_lifecycle_script = pkg.scripts[stage]
   } else {
-    opts.log.silly('lifecycle', logid(pkg, stage), 'no script for ' + stage + ', continuing')
+    opts.log.silly('lifecycle', logid(pkg, stage), `no script for ${stage}, continuing`)
   }
 
   function done (er) {
@@ -162,10 +162,10 @@ function shouldPrependCurrentNodeDirToPATH (opts) {
   if (cfgsetting === false) return false
   if (cfgsetting === true) return true
 
-  var isDifferentNodeInPath
+  let isDifferentNodeInPath
 
-  var isWindows = process.platform === 'win32'
-  var foundExecPath
+  const isWindows = process.platform === 'win32'
+  let foundExecPath
   try {
     foundExecPath = which.sync(path.basename(process.execPath), { pathExt: isWindows ? ';' : ':' })
     // Apply `fs.realpath()` here to avoid false positives when `node` is a symlinked executable.
@@ -192,9 +192,9 @@ function shouldPrependCurrentNodeDirToPATH (opts) {
 }
 
 function validWd (d, cb) {
-  fs.stat(d, function (er, st) {
+  fs.stat(d, (er, st) => {
     if (er || !st.isDirectory()) {
-      var p = path.dirname(d)
+      const p = path.dirname(d)
       if (p === d) {
         return cb(new Error('Could not find suitable wd'))
       }
@@ -206,19 +206,18 @@ function validWd (d, cb) {
 
 function runPackageLifecycle (pkg, stage, env, wd, opts, cb) {
   // run package lifecycle scripts in the package root, or the nearest parent.
-  var cmd = env.npm_lifecycle_script
+  const cmd = env.npm_lifecycle_script
 
-  var note = '\n> ' + pkg._id + ' ' + stage + ' ' + wd +
-             '\n> ' + cmd + '\n'
+  const note = `\n> ${pkg._id} ${stage} ${wd}\n> ${cmd}\n`
   runCmd(note, cmd, pkg, env, stage, wd, opts, cb)
 }
 
-var running = false
-var queue = []
+let running = false
+const queue = []
 function dequeue () {
   running = false
   if (queue.length) {
-    var r = queue.shift()
+    const r = queue.shift()
     runCmd.apply(null, r)
   }
 }
@@ -233,9 +232,9 @@ function runCmd (note, cmd, pkg, env, stage, wd, opts, cb) {
     running = true
   }
   opts.log.pause()
-  var unsafe = opts.unsafePerm
-  var user = unsafe ? null : opts.user
-  var group = unsafe ? null : opts.group
+  let unsafe = opts.unsafePerm
+  const user = unsafe ? null : opts.user
+  const group = unsafe ? null : opts.group
 
   if (opts.log.level !== 'silent') {
     opts.log.clearProgress()
@@ -251,7 +250,7 @@ function runCmd (note, cmd, pkg, env, stage, wd, opts, cb) {
   if (unsafe) {
     runCmd_(cmd, pkg, env, wd, opts, stage, unsafe, 0, 0, cb)
   } else {
-    uidNumber(user, group, function (er, uid, gid) {
+    uidNumber(user, group, (er, uid, gid) => {
       runCmd_(cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb)
     })
   }
@@ -264,7 +263,7 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     process.nextTick(dequeue)
   }
 
-  var conf = {
+  const conf = {
     cwd: wd,
     env: env,
     stdio: opts.stdio || [ 0, 1, 2 ]
@@ -275,10 +274,10 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     conf.gid = gid ^ 0
   }
 
-  var sh = 'sh'
-  var shFlag = '-c'
+  let sh = 'sh'
+  let shFlag = '-c'
 
-  var customShell = opts.scriptShell
+  const customShell = opts.scriptShell
 
   if (customShell) {
     sh = customShell
@@ -292,23 +291,23 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
   opts.log.verbose('lifecycle', logid(pkg, stage), 'CWD:', wd)
   opts.log.silly('lifecycle', logid(pkg, stage), 'Args:', [shFlag, cmd])
 
-  var proc = spawn(sh, [shFlag, cmd], conf, opts.log)
+  const proc = spawn(sh, [shFlag, cmd], conf, opts.log)
 
   proc.on('error', procError)
-  proc.on('close', function (code, signal) {
+  proc.on('close', (code, signal) => {
     opts.log.silly('lifecycle', logid(pkg, stage), 'Returned: code:', code, ' signal:', signal)
     if (signal) {
       process.kill(process.pid, signal)
     } else if (code) {
-      var er = new Error('Exit status ' + code)
+      var er = new Error(`Exit status ${code}`)
       er.errno = code
     }
     procError(er)
   })
-  byline(proc.stdout).on('data', function (data) {
+  byline(proc.stdout).on('data', data => {
     opts.log.verbose('lifecycle', logid(pkg, stage), 'stdout', data.toString())
   })
-  byline(proc.stderr).on('data', function (data) {
+  byline(proc.stderr).on('data', data => {
     opts.log.verbose('lifecycle', logid(pkg, stage), 'stderr', data.toString())
   })
   process.once('SIGTERM', procKill)
@@ -316,13 +315,12 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
 
   function procError (er) {
     if (er) {
-      opts.log.info('lifecycle', logid(pkg, stage), 'Failed to exec ' + stage + ' script')
-      er.message = pkg._id + ' ' + stage + ': `' + cmd + '`\n' +
-                   er.message
+      opts.log.info('lifecycle', logid(pkg, stage), `Failed to exec ${stage} script`)
+      er.message = `${pkg._id} ${stage}: \`${cmd}\`\n${er.message}`
       if (er.code !== 'EPERM') {
         er.code = 'ELIFECYCLE'
       }
-      fs.stat(opts.dir, function (statError, d) {
+      fs.stat(opts.dir, (statError, d) => {
         if (statError && statError.code === 'ENOENT' && opts.dir.split(path.sep).slice(-1)[0] === 'node_modules') {
           opts.log.warn('', 'Local package.json exists, but node_modules missing, did you mean to install?')
         }
@@ -342,7 +340,7 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
   }
   function procInterupt () {
     proc.kill('SIGINT')
-    proc.on('exit', function () {
+    proc.on('exit', () => {
       process.exit()
     })
     process.once('SIGINT', procKill)
@@ -350,11 +348,10 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
 }
 
 function runHookLifecycle (pkg, stage, env, wd, opts, cb) {
-  hookStat(opts.dir, stage, function (er) {
+  hookStat(opts.dir, stage, er => {
     if (er) return cb()
-    var cmd = path.join(opts.dir, '.hooks', stage)
-    var note = '\n> ' + pkg._id + ' ' + stage + ' ' + wd +
-               '\n> ' + cmd
+    const cmd = path.join(opts.dir, '.hooks', stage)
+    const note = `\n> ${pkg._id} ${stage} ${wd}\n> ${cmd}`
     runCmd(note, cmd, pkg, env, stage, wd, opts, cb)
   })
 }
@@ -384,7 +381,7 @@ function makeEnv (data, opts, prefix, env) {
 
   for (i in data) {
     if (i.charAt(0) !== '_') {
-      var envKey = (prefix + i).replace(/[^a-zA-Z0-9_]/g, '_')
+      const envKey = (prefix + i).replace(/[^a-zA-Z0-9_]/g, '_')
       if (i === 'readme') {
         continue
       }
@@ -392,21 +389,21 @@ function makeEnv (data, opts, prefix, env) {
         try {
           // quick and dirty detection for cyclical structures
           JSON.stringify(data[i])
-          makeEnv(data[i], opts, envKey + '_', env)
+          makeEnv(data[i], opts, `${envKey}_`, env)
         } catch (ex) {
           // usually these are package objects.
           // just get the path and basic details.
-          var d = data[i]
+          const d = data[i]
           makeEnv(
             { name: d.name, version: d.version, path: d.path },
             opts,
-            envKey + '_',
+            `${envKey}_`,
             env
           )
         }
       } else {
         env[envKey] = String(data[i])
-        env[envKey] = env[envKey].indexOf('\n') !== -1
+        env[envKey] = env[envKey].includes('\n')
           ? JSON.stringify(env[envKey])
           : env[envKey]
       }
@@ -416,29 +413,29 @@ function makeEnv (data, opts, prefix, env) {
   if (prefix !== 'npm_package_') return env
 
   prefix = 'npm_config_'
-  var pkgConfig = {}
-  var pkgVerConfig = {}
-  var namePref = data.name + ':'
-  var verPref = data.name + '@' + data.version + ':'
+  const pkgConfig = {}
+  const pkgVerConfig = {}
+  const namePref = `${data.name}:`
+  const verPref = `${data.name}@${data.version}:`
 
-  Object.keys(opts.config).forEach(function (i) {
+  Object.keys(opts.config).forEach(i => {
     // in some rare cases (e.g. working with nerf darts), there are segmented
     // "private" (underscore-prefixed) config names -- don't export
-    if ((i.charAt(0) === '_' && i.indexOf('_' + namePref) !== 0) || i.match(/:_/)) {
+    if ((i.charAt(0) === '_' && i.indexOf(`_${namePref}`) !== 0) || i.match(/:_/)) {
       return
     }
-    var value = opts.config[i]
+    let value = opts.config[i]
     if (value instanceof Stream || Array.isArray(value)) return
     if (i.match(/umask/)) value = umask.toString(value)
     if (!value) value = ''
-    else if (typeof value === 'number') value = '' + value
+    else if (typeof value === 'number') value = `${value}`
     else if (typeof value !== 'string') value = JSON.stringify(value)
 
-    value = value.indexOf('\n') !== -1
+    value = value.includes('\n')
       ? JSON.stringify(value)
       : value
     i = i.replace(/^_+/, '')
-    var k
+    let k
     if (i.indexOf(namePref) === 0) {
       k = i.substr(namePref.length).replace(/[^a-zA-Z0-9_]/g, '_')
       pkgConfig[k] = value
@@ -446,14 +443,14 @@ function makeEnv (data, opts, prefix, env) {
       k = i.substr(verPref.length).replace(/[^a-zA-Z0-9_]/g, '_')
       pkgVerConfig[k] = value
     }
-    var envKey = (prefix + i).replace(/[^a-zA-Z0-9_]/g, '_')
+    const envKey = (prefix + i).replace(/[^a-zA-Z0-9_]/g, '_')
     env[envKey] = value
   })
 
   prefix = 'npm_package_config_'
-  ;[pkgConfig, pkgVerConfig].forEach(function (conf) {
-    for (var i in conf) {
-      var envKey = (prefix + i)
+  ;[pkgConfig, pkgVerConfig].forEach(conf => {
+    for (const i in conf) {
+      const envKey = (prefix + i)
       env[envKey] = conf[i]
     }
   })
