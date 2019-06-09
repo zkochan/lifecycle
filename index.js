@@ -101,7 +101,7 @@ function _incorrectWorkingDirectory (wd, pkg) {
 }
 
 function lifecycle_ (pkg, stage, wd, opts, env, cb) {
-  const pathArr = []
+  const pathArr = opts.extraBinPaths || []
   const p = wd.split(/[\\/]node_modules[\\/]/)
   let acc = path.resolve(p.shift())
 
