@@ -312,6 +312,7 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
   })
   process.once('SIGTERM', procKill)
   process.once('SIGINT', procInterupt)
+  process.on('exit', procKill)
 
   function procError (er) {
     if (er) {
@@ -335,7 +336,10 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     process.removeListener('SIGINT', procKill)
     return cb(er)
   }
+  let called = false
   function procKill () {
+    if (called) return
+    called = true
     proc.kill()
   }
   function procInterupt () {
