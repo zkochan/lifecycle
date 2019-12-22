@@ -10,7 +10,7 @@ dependencies:
 devDependencies:
   npm-lifecycle: 2.1.1
   nyc: 14.1.1
-  sinon: 7.5.0
+  sinon: 8.0.0
   standard: 12.0.1
   standard-version: 7.0.0
   tap: 14.10.1
@@ -104,27 +104,27 @@ packages:
     dev: true
     resolution:
       integrity: sha512-YTf6PXoh3+eZgRCBzzP25Bugd2ngmpQVrk7kXX0i5N9BO7TFBtIgZYs7WtxtOGs8e6A4ZI7ECkbBCEHeXocvOA==
-  /@sinonjs/commons/1.6.0:
+  /@sinonjs/commons/1.7.0:
     dependencies:
       type-detect: 4.0.8
     dev: true
     resolution:
-      integrity: sha512-w4/WHG7C4WWFyE5geCieFJF6MZkbW4VAriol5KlmQXpAQdxvV0p26sqNZOW6Qyw6Y0l9K4g+cHvvczR2sEEpqg==
-  /@sinonjs/formatio/3.2.2:
+      integrity: sha512-qbk9AP+cZUsKdW1GJsBpxPKFmCJ0T8swwzVje3qFd+AkQb74Q/tiuzrdfFg8AD2g5HH/XbE/I8Uc1KYHVYWfhg==
+  /@sinonjs/formatio/4.0.1:
     dependencies:
-      '@sinonjs/commons': 1.6.0
-      '@sinonjs/samsam': 3.3.3
+      '@sinonjs/commons': 1.7.0
+      '@sinonjs/samsam': 4.2.0
     dev: true
     resolution:
-      integrity: sha512-B8SEsgd8gArBLMD6zpRw3juQ2FVSsmdd7qlevyDqzS9WTCtvF55/gAL+h6gue8ZvPYcdiPdvueM/qm//9XzyTQ==
-  /@sinonjs/samsam/3.3.3:
+      integrity: sha512-asIdlLFrla/WZybhm0C8eEzaDNNrzymiTqHMeJl6zPW2881l3uuVRpm0QlRQEjqYWv6CcKMGYME3LbrLJsORBw==
+  /@sinonjs/samsam/4.2.0:
     dependencies:
-      '@sinonjs/commons': 1.6.0
+      '@sinonjs/commons': 1.7.0
       array-from: 2.1.1
-      lodash: 4.17.15
+      lodash.get: 4.4.2
     dev: true
     resolution:
-      integrity: sha512-bKCMKZvWIjYD0BLGnNrxVuw4dkWCYsLqFOUWw8VgKF/+5Y+mE7LfHWPIYoDXowH+3a9LsWDMo0uAP8YDosPvHQ==
+      integrity: sha512-yG7QbUz38ZPIegfuSMEcbOo0kkLGmPa8a0Qlz4dk7+cXYALDScWjIZzAm/u2+Frh+bcdZF6wZJZwwuJjY0WAjA==
   /@sinonjs/text-encoding/0.7.1:
     dev: true
     resolution:
@@ -1897,6 +1897,12 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-tdRU3CGZriJWmfNGfloH87lVuv0=
+  /has-flag/4.0.0:
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==
   /has-symbols/1.0.1:
     dev: true
     engines:
@@ -2428,6 +2434,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-+wMJF/hqMTTlvJvsDWngAT3f7bI=
+  /lodash.get/4.4.2:
+    dev: true
+    resolution:
+      integrity: sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
   /lodash.ismatch/4.4.0:
     dev: true
     resolution:
@@ -2455,10 +2465,12 @@ packages:
       node: '>=0.8.6'
     resolution:
       integrity: sha512-U7KCmLdqsGHBLeWqYlFA0V0Sl6P08EE1ZrmA9cxjUE0WVqT9qnyVDPz1kzpFEP0jdJuFnasWIfSd7fsaNXkpbg==
-  /lolex/4.2.0:
+  /lolex/5.1.2:
+    dependencies:
+      '@sinonjs/commons': 1.7.0
     dev: true
     resolution:
-      integrity: sha512-gKO5uExCXvSm6zbF562EvM+rd1kQDnB9AZBbiQVzf1ZmdDpxUSvpnAaVOP83N/31mRK8Ml8/VE8DMvsAZQ+7wg==
+      integrity: sha512-h4hmjAvHTmd+25JSwrtTIuwbKdwg5NzZVRMLn9saij4SZaepCrTCxPr35H/3bjwfMJtN+t3CX8672UIkglz28A==
   /loose-envify/1.4.0:
     dependencies:
       js-tokens: 4.0.0
@@ -2682,16 +2694,17 @@ packages:
     dev: true
     resolution:
       integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
-  /nise/1.5.2:
+  /nise/3.0.0:
     dependencies:
-      '@sinonjs/formatio': 3.2.2
+      '@sinonjs/commons': 1.7.0
+      '@sinonjs/formatio': 4.0.1
       '@sinonjs/text-encoding': 0.7.1
       just-extend: 4.0.2
-      lolex: 4.2.0
+      lolex: 5.1.2
       path-to-regexp: 1.8.0
     dev: true
     resolution:
-      integrity: sha512-/6RhOUlicRCbE9s+94qCUsyE+pKlVJ5AhIv+jEE7ESKwnbXqulKZ1FYU+XAtHHWE9TinYvAxDUJAb912PwPoWA==
+      integrity: sha512-EObFx5tioBMePHpU/gGczaY2YDqL255iwjmZwswu2CiwEW8xIGrr3E2xij+efIppS1nLQo9NyXSIUySGHUOhHQ==
   /node-gyp/4.0.0:
     dependencies:
       glob: 7.1.6
@@ -3564,18 +3577,18 @@ packages:
   /signal-exit/3.0.2:
     resolution:
       integrity: sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
-  /sinon/7.5.0:
+  /sinon/8.0.0:
     dependencies:
-      '@sinonjs/commons': 1.6.0
-      '@sinonjs/formatio': 3.2.2
-      '@sinonjs/samsam': 3.3.3
-      diff: 3.5.0
-      lolex: 4.2.0
-      nise: 1.5.2
-      supports-color: 5.5.0
+      '@sinonjs/commons': 1.7.0
+      '@sinonjs/formatio': 4.0.1
+      '@sinonjs/samsam': 4.2.0
+      diff: 4.0.1
+      lolex: 5.1.2
+      nise: 3.0.0
+      supports-color: 7.1.0
     dev: true
     resolution:
-      integrity: sha512-AoD0oJWerp0/rY9czP/D6hDTTUYGpObhZjMpd7Cl/A6+j0xBE+ayL/ldfggkBXUs0IkvIiM1ljM8+WkOc5k78Q==
+      integrity: sha512-9ugfO9tMrxTzqViG0hGhJoLXj8M01FZwfXMpYSmQT1AuV2jyXDJZUMpbENHBY9/2c2u6RKkHOcbYINx2FttUkg==
   /slash/1.0.0:
     dev: true
     engines:
@@ -3884,6 +3897,14 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-qe1jfm1Mg7Nq/NSh6XE24gPXROEVsWHxC1LIx//XNlD9iw7YZQGjZNjYN7xGaEG6iKdA8EtNFW6R0gjnVXp+wQ==
+  /supports-color/7.1.0:
+    dependencies:
+      has-flag: 4.0.0
+    dev: true
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-oRSIpR8pxT1Wr2FquTNnGet79b3BWljqOuoW/h4oBhxJ/HUbX5nX6JSruTkvXDCFMwDPvsaTTbvMLKZWSy0R5g==
   /symbol-observable/1.0.1:
     dev: true
     engines:
@@ -4441,7 +4462,7 @@ specifiers:
   npm-lifecycle: 2.1.1
   nyc: 14.1.1
   resolve-from: ^5.0.0
-  sinon: 7.5.0
+  sinon: 8.0.0
   slide: ^1.1.6
   standard: 12.0.1
   standard-version: 7.0.0
