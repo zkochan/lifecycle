@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "npm-lifecycle": "2.1.1",
-    "nyc": "14.1.1",
+    "nyc": "15.0.0",
     "sinon": "8.1.1",
     "standard": "12.0.1",
     "standard-version": "7.1.0",
