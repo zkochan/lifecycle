@@ -10,7 +10,7 @@ dependencies:
 devDependencies:
   npm-lifecycle: 2.1.1
   nyc: 14.1.1
-  sinon: 8.0.0
+  sinon: 8.1.1
   standard: 12.0.1
   standard-version: 7.0.0
   tap: 14.10.1
@@ -113,18 +113,18 @@ packages:
   /@sinonjs/formatio/4.0.1:
     dependencies:
       '@sinonjs/commons': 1.7.0
-      '@sinonjs/samsam': 4.2.0
+      '@sinonjs/samsam': 4.2.2
     dev: true
     resolution:
       integrity: sha512-asIdlLFrla/WZybhm0C8eEzaDNNrzymiTqHMeJl6zPW2881l3uuVRpm0QlRQEjqYWv6CcKMGYME3LbrLJsORBw==
-  /@sinonjs/samsam/4.2.0:
+  /@sinonjs/samsam/4.2.2:
     dependencies:
       '@sinonjs/commons': 1.7.0
-      array-from: 2.1.1
       lodash.get: 4.4.2
+      type-detect: 4.0.8
     dev: true
     resolution:
-      integrity: sha512-yG7QbUz38ZPIegfuSMEcbOo0kkLGmPa8a0Qlz4dk7+cXYALDScWjIZzAm/u2+Frh+bcdZF6wZJZwwuJjY0WAjA==
+      integrity: sha512-z9o4LZUzSD9Hl22zV38aXNykgFeVj8acqfFabCY6FY83n/6s/XwNJyYYldz6/9lBJanpno9h+oL6HTISkviweA==
   /@sinonjs/text-encoding/0.7.1:
     dev: true
     resolution:
@@ -253,10 +253,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-3wEKoSh+Fku9pvlyOwqWoexBh6E=
-  /array-from/2.1.1:
-    dev: true
-    resolution:
-      integrity: sha1-z+nYwmYoudxa7MYqn12PHzUsEZU=
   /array-ify/1.0.0:
     dev: true
     resolution:
@@ -1153,6 +1149,12 @@ packages:
       node: '>=0.3.1'
     resolution:
       integrity: sha512-s2+XdvhPCOF01LRQBC8hf4vhbVmI2CGS5aZnxLJlT5FtdhPCDFq80q++zK2KlrVorVDdL5BOGZ/VfLrVtYNF+Q==
+  /diff/4.0.2:
+    dev: true
+    engines:
+      node: '>=0.3.1'
+    resolution:
+      integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
   /doctrine/1.5.0:
     dependencies:
       esutils: 2.0.3
@@ -2694,7 +2696,7 @@ packages:
     dev: true
     resolution:
       integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
-  /nise/3.0.0:
+  /nise/3.0.1:
     dependencies:
       '@sinonjs/commons': 1.7.0
       '@sinonjs/formatio': 4.0.1
@@ -2704,7 +2706,7 @@ packages:
       path-to-regexp: 1.8.0
     dev: true
     resolution:
-      integrity: sha512-EObFx5tioBMePHpU/gGczaY2YDqL255iwjmZwswu2CiwEW8xIGrr3E2xij+efIppS1nLQo9NyXSIUySGHUOhHQ==
+      integrity: sha512-fYcH9y0drBGSoi88kvhpbZEsenX58Yr+wOJ4/Mi1K4cy+iGP/a73gNoyNhu5E9QxPdgTlVChfIaAlnyOy/gHUA==
   /node-gyp/4.0.0:
     dependencies:
       glob: 7.1.6
@@ -3577,18 +3579,18 @@ packages:
   /signal-exit/3.0.2:
     resolution:
       integrity: sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
-  /sinon/8.0.0:
+  /sinon/8.1.1:
     dependencies:
       '@sinonjs/commons': 1.7.0
       '@sinonjs/formatio': 4.0.1
-      '@sinonjs/samsam': 4.2.0
-      diff: 4.0.1
+      '@sinonjs/samsam': 4.2.2
+      diff: 4.0.2
       lolex: 5.1.2
-      nise: 3.0.0
+      nise: 3.0.1
       supports-color: 7.1.0
     dev: true
     resolution:
-      integrity: sha512-9ugfO9tMrxTzqViG0hGhJoLXj8M01FZwfXMpYSmQT1AuV2jyXDJZUMpbENHBY9/2c2u6RKkHOcbYINx2FttUkg==
+      integrity: sha512-E+tWr3acRdoe1nXbHMu86SSqA1WGM7Yw3jZRLvlCMnXwTHP8lgFFVn5BnKnF26uc5SfZ3D7pA9sN7S3Y2jG4Ew==
   /slash/1.0.0:
     dev: true
     engines:
@@ -4462,7 +4464,7 @@ specifiers:
   npm-lifecycle: 2.1.1
   nyc: 14.1.1
   resolve-from: ^5.0.0
-  sinon: 8.0.0
+  sinon: 8.1.1
   slide: ^1.1.6
   standard: 12.0.1
   standard-version: 7.0.0
