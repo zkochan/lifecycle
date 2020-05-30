@@ -82,6 +82,11 @@ function lifecycle (pkg, stage, wd, opts) {
         env.npm_execpath = require.main.filename
         env.INIT_CWD = process.cwd()
         env.npm_config_node_gyp = env.npm_config_node_gyp || DEFAULT_NODE_GYP_PATH
+        if (opts.extraEnv) {
+          for (const [key, value] of Object.entries(opts.extraEnv)) {
+            env[key] = value
+          }
+        }
 
         // 'nobody' typically doesn't have permission to write to /tmp
         // even if it's never used, sh freaks out.

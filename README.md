@@ -43,6 +43,7 @@ jump in if you'd like to, or even ask us questions if something isn't clear.
 * `opts.stdio` - the [stdio](https://nodejs.org/api/child_process.html#child_process_options_stdio)
 passed to the child process. `[0, 1, 2]` by default.
 * `opts.runConcurrently` - *Boolean* - `false` by default. If `true`, lifecycle scripts may run concurrently.
+* `opts.extraEnv` - *Record<string, string>* - add some extra env vars to the exec environment of the lifecycle script.
 
 ##### Example
 
