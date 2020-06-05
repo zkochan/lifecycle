@@ -9,7 +9,7 @@ dependencies:
   which: 2.0.2
 devDependencies:
   npm-lifecycle: 2.1.1
-  nyc: 15.0.1
+  nyc: 15.1.0
   sinon: 9.0.0
   standard: 12.0.1
   standard-version: 8.0.0
@@ -1862,6 +1862,12 @@ packages:
       node: 6.* || 8.* || >= 10.*
     resolution:
       integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==
+  /get-package-type/0.1.0:
+    dev: true
+    engines:
+      node: '>=8.0.0'
+    resolution:
+      integrity: sha512-pjzuKtY64GYfWizNAJ0fr9VqttZkNiK2iS430LtIHzjBEr6bX8Am2zm4sW4Ro5wjWW5cAlRL1qAMTcXbjNAO2Q==
   /get-pkg-repo/1.4.0:
     dependencies:
       hosted-git-info: 2.8.8
@@ -3045,7 +3051,7 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-OI0vm6ZGUnoGZv/tLdZ2esSVzDwUC88SNs+6JoSOMVxA+gKMB8Tk7jBwgemLx4O40lhhvZCVw1C+OYLOBOPXWw==
-  /nyc/15.0.1:
+  /nyc/15.1.0:
     dependencies:
       '@istanbuljs/load-nyc-config': 1.0.0
       '@istanbuljs/schema': 0.1.2
@@ -3055,6 +3061,7 @@ packages:
       find-cache-dir: 3.3.1
       find-up: 4.1.0
       foreground-child: 2.0.0
+      get-package-type: 0.1.0
       glob: 7.1.6
       istanbul-lib-coverage: 3.0.0
       istanbul-lib-hook: 3.0.0
@@ -3078,7 +3085,7 @@ packages:
       node: '>=8.9'
     hasBin: true
     resolution:
-      integrity: sha512-n0MBXYBYRqa67IVt62qW1r/d9UH/Qtr7SF1w/nQLJ9KxvWF6b2xCHImRAixHN9tnMMYHC2P14uo6KddNGwMgGg==
+      integrity: sha512-jMW04n9SxKdKi1ZMGhvUTHBN0EICCRkHemEoE5jm6mTYcqcdas0ATzgUgejlQUHMvpnOZqGB5Xxsv9KxJW1j8A==
   /oauth-sign/0.9.0:
     resolution:
       integrity: sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==
@@ -4860,7 +4867,7 @@ specifiers:
   graceful-fs: ^4.1.15
   node-gyp: ^6.0.0
   npm-lifecycle: 2.1.1
-  nyc: 15.0.1
+  nyc: 15.1.0
   resolve-from: ^5.0.0
   sinon: 9.0.0
   slide: ^1.1.6
