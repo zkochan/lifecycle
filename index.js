@@ -5,6 +5,7 @@ exports.makeEnv = makeEnv
 exports._incorrectWorkingDirectory = _incorrectWorkingDirectory
 
 const spawn = require('./lib/spawn')
+const { execute } = require('@yarnpkg/shell')
 const path = require('path')
 const Stream = require('stream').Stream
 const fs = require('graceful-fs')
@@ -14,6 +15,7 @@ const umask = require('umask')
 const which = require('which')
 const byline = require('byline')
 const resolveFrom = require('resolve-from')
+const { PassThrough } = require('stream')
 
 const DEFAULT_NODE_GYP_PATH = resolveFrom(__dirname, 'node-gyp/bin/node-gyp')
 const hookStatCache = new Map()
@@ -295,6 +297,33 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
   opts.log.verbose('lifecycle', logid(pkg, stage), 'PATH:', env[PATH])
   opts.log.verbose('lifecycle', logid(pkg, stage), 'CWD:', wd)
   opts.log.silly('lifecycle', logid(pkg, stage), 'Args:', [shFlag, cmd])
+
+  if (opts.shellEmulator) {
+    const execOpts = { cwd: wd, env }
+    if (opts.stdio === 'pipe') {
+      const stdout = new PassThrough()
+      const stderr = new PassThrough()
+      byline(stdout).on('data', data => {
+        opts.log.verbose('lifecycle', logid(pkg, stage), 'stdout', data.toString())
+      })
+      byline(stderr).on('data', data => {
+        opts.log.verbose('lifecycle', logid(pkg, stage), 'stderr', data.toString())
+      })
+      execOpts.stdout = stdout
+      execOpts.stderr = stderr
+    }
+    execute(cmd, [], execOpts)
+      .then((code) => {
+        opts.log.silly('lifecycle', logid(pkg, stage), 'Returned: code:', code)
+        if (code) {
+          var er = new Error(`Exit status ${code}`)
+          er.errno = code
+        }
+        procError(er)
+      })
+      .catch((err) => procError(err))
+    return
+  }
 
   const proc = spawn(sh, [shFlag, cmd], conf, opts.log)
 

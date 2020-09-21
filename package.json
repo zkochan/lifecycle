@@ -25,13 +25,14 @@
   "author": "Mike Sherov",
   "license": "Artistic-2.0",
   "engines": {
-    "node": ">=10.13"
+    "node": ">=10.19"
   },
   "bugs": {
     "url": "https://github.com/npm/lifecycle/issues"
   },
   "homepage": "https://github.com/npm/lifecycle#readme",
   "dependencies": {
+    "@yarnpkg/shell": "^2.2.0",
     "byline": "^5.0.0",
     "graceful-fs": "^4.1.15",
     "node-gyp": "^7.0.0",
