@@ -4,6 +4,9 @@ exports = module.exports = lifecycle
 exports.makeEnv = makeEnv
 exports._incorrectWorkingDirectory = _incorrectWorkingDirectory
 
+// for testing
+const platform = process.env.__TESTING_FAKE_PLATFORM__ || process.platform
+const isWindows = platform === 'win32'
 const spawn = require('./lib/spawn')
 const { execute } = require('@yarnpkg/shell')
 const path = require('path')
@@ -20,17 +23,28 @@ const { PassThrough } = require('stream')
 const DEFAULT_NODE_GYP_PATH = resolveFrom(__dirname, 'node-gyp/bin/node-gyp')
 const hookStatCache = new Map()
 
-let PATH = 'PATH'
+let PATH = isWindows ? 'Path' : 'PATH'
+exports._pathEnvName = PATH
+const delimiter = path.delimiter
 
-// windows calls it's path 'Path' usually, but this is not guaranteed.
-if (process.platform === 'win32') {
-  PATH = 'Path'
-  Object.keys(process.env).forEach(e => {
-    if (e.match(/^PATH$/i)) {
-      PATH = e
-    }
-  })
+// windows calls its path 'Path' usually, but this is not guaranteed.
+// merge them all together in the order they appear in the object.
+const mergePath = env =>
+  Object.keys(env).filter(p => /^path$/i.test(p) && env[p])
+    .map(p => env[p].split(delimiter))
+    .reduce((set, p) => set.concat(p.filter(p => !set.includes(p))), [])
+    .join(delimiter)
+exports._mergePath = mergePath
+
+const setPathEnv = (env, path) => {
+  // first ensure that the canonical value is set.
+  env[PATH] = path
+  // also set any other case values, because windows.
+  Object.keys(env)
+    .filter(p => p !== PATH && /^path$/i.test(p))
+    .forEach(p => { env[p] = path })
 }
+exports._setPathEnv = setPathEnv
 
 function logid (pkg, stage) {
   return `${pkg._id}~${stage}:`
@@ -127,8 +141,10 @@ function lifecycle_ (pkg, stage, wd, opts, env, cb) {
     pathArr.push(path.dirname(process.execPath))
   }
 
-  if (env[PATH]) pathArr.push(env[PATH])
-  env[PATH] = pathArr.join(process.platform === 'win32' ? ';' : ':')
+  const existingPath = mergePath(env)
+  if (existingPath) pathArr.push(existingPath)
+  const envPath = pathArr.join(isWindows ? ';' : ':')
+  setPathEnv(env, envPath)
 
   let packageLifecycle = pkg.scripts && pkg.scripts.hasOwnProperty(stage)
 
@@ -171,7 +187,6 @@ function shouldPrependCurrentNodeDirToPATH (opts) {
 
   let isDifferentNodeInPath
 
-  const isWindows = process.platform === 'win32'
   let foundExecPath
   try {
     foundExecPath = which.sync(path.basename(process.execPath), { pathExt: isWindows ? ';' : ':' })
@@ -250,7 +265,7 @@ function runCmd (note, cmd, pkg, env, stage, wd, opts, cb) {
   }
   opts.log.verbose('lifecycle', logid(pkg, stage), 'unsafe-perm in lifecycle', unsafe)
 
-  if (process.platform === 'win32') {
+  if (isWindows) {
     unsafe = true
   }
 
@@ -258,18 +273,18 @@ function runCmd (note, cmd, pkg, env, stage, wd, opts, cb) {
     runCmd_(cmd, pkg, env, wd, opts, stage, unsafe, 0, 0, cb)
   } else {
     uidNumber(user, group, (er, uid, gid) => {
+      if (er) {
+        er.code = 'EUIDLOOKUP'
+        opts.log.resume()
+        process.nextTick(dequeue)
+        return cb(er)
+      }
       runCmd_(cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb)
     })
   }
 }
 
-function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
-  function cb (er) {
-    cb_.apply(null, arguments)
-    opts.log.resume()
-    process.nextTick(dequeue)
-  }
-
+const getSpawnArgs = ({ cmd, wd, opts, uid, gid, unsafe, env }) => {
   const conf = {
     cwd: wd,
     env: env,
@@ -281,22 +296,38 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     conf.gid = gid ^ 0
   }
 
-  let sh = 'sh'
-  let shFlag = '-c'
-
   const customShell = opts.scriptShell
 
+  let sh = 'sh'
+  let shFlag = '-c'
   if (customShell) {
     sh = customShell
-  } else if (process.platform === 'win32') {
+  } else if (isWindows || opts._TESTING_FAKE_WINDOWS_) {
     sh = process.env.comspec || 'cmd'
-    shFlag = '/d /s /c'
-    conf.windowsVerbatimArguments = true
+    // '/d /s /c' is used only for cmd.exe.
+    if (/^(?:.*\\)?cmd(?:\.exe)?$/i.test(sh)) {
+      shFlag = '/d /s /c'
+      conf.windowsVerbatimArguments = true
+    }
   }
+
+  return [sh, [shFlag, cmd], conf]
+}
+
+exports._getSpawnArgs = getSpawnArgs
+
+function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
+  function cb (er) {
+    cb_.apply(null, arguments)
+    opts.log.resume()
+    process.nextTick(dequeue)
+  }
+
+  const [sh, args, conf] = getSpawnArgs({ cmd, wd, opts, uid, gid, unsafe, env })
 
   opts.log.verbose('lifecycle', logid(pkg, stage), 'PATH:', env[PATH])
   opts.log.verbose('lifecycle', logid(pkg, stage), 'CWD:', wd)
-  opts.log.silly('lifecycle', logid(pkg, stage), 'Args:', [shFlag, cmd])
+  opts.log.silly('lifecycle', logid(pkg, stage), 'Args:', args)
 
   if (opts.shellEmulator) {
     const execOpts = { cwd: wd, env }
@@ -325,7 +356,7 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     return
   }
 
-  const proc = spawn(sh, [shFlag, cmd], conf, opts.log)
+  var proc = spawn(sh, args, conf, opts.log)
 
   proc.on('error', procError)
   proc.on('close', (code, signal) => {
@@ -368,6 +399,7 @@ function runCmd_ (cmd, pkg, env, wd, opts, stage, unsafe, uid, gid, cb_) {
     process.removeListener('SIGTERM', procKill)
     process.removeListener('SIGTERM', procInterupt)
     process.removeListener('SIGINT', procKill)
+    process.removeListener('SIGINT', procInterupt)
     return cb(er)
   }
   let called = false
@@ -463,11 +495,16 @@ function makeEnv (data, opts, prefix, env) {
       return
     }
     let value = opts.config[i]
-    if (value instanceof Stream || Array.isArray(value)) return
+    if (value instanceof Stream || Array.isArray(value) || typeof value === 'function') return
     if (i.match(/umask/)) value = umask.toString(value)
+
     if (!value) value = ''
     else if (typeof value === 'number') value = `${value}`
     else if (typeof value !== 'string') value = JSON.stringify(value)
+
+    if (typeof value !== 'string') {
+      return
+    }
 
     value = value.includes('\n')
       ? JSON.stringify(value)
