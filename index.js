@@ -17,7 +17,11 @@ const byline = require('byline')
 const resolveFrom = require('resolve-from')
 const { PassThrough } = require('stream')
 
-const DEFAULT_NODE_GYP_PATH = resolveFrom(__dirname, 'node-gyp/bin/node-gyp')
+let DEFAULT_NODE_GYP_PATH
+try {
+  DEFAULT_NODE_GYP_PATH = resolveFrom(__dirname, 'node-gyp/bin/node-gyp')
+} catch (err) {}
+
 const hookStatCache = new Map()
 
 let PATH = 'PATH'
