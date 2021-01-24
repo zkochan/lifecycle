@@ -11,7 +11,7 @@ dependencies:
 devDependencies:
   npm-lifecycle: 2.1.1
   nyc: 15.1.0
-  sinon: 9.2.3
+  sinon: 9.2.4
   standard: 12.0.1
   standard-version: 9.1.0
   tap: 14.11.0
@@ -239,14 +239,14 @@ packages:
     dev: true
     resolution:
       integrity: sha512-MZPUxrmFubI36XS1DI3qmI0YdN1gks62JtFZvxR67ljjSNCeK6U08Zx4msEWOXuofgqUt6zPHSi1H9fbjR/NRA==
-  /@sinonjs/samsam/5.3.0:
+  /@sinonjs/samsam/5.3.1:
     dependencies:
       '@sinonjs/commons': 1.8.1
       lodash.get: 4.4.2
       type-detect: 4.0.8
     dev: true
     resolution:
-      integrity: sha512-hXpcfx3aq+ETVBwPlRFICld5EnrkexXuXDwqUNhDdr5L8VjvMeSRwyOa0qL7XFmR+jVWR4rUZtnxlG7RX72sBg==
+      integrity: sha512-1Hc0b1TtyfBu8ixF/tpfSHTVWKwCBLY4QJbkgnE7HcwyvT2xArDxb4K7dMgqRm3szI+LJbzmW/s4xxEhv6hwDg==
   /@sinonjs/text-encoding/0.7.1:
     dev: true
     resolution:
@@ -725,7 +725,7 @@ packages:
     resolution:
       integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==
   /circular-json/0.3.3:
-    deprecated: 'CircularJSON is in maintenance only, flatted is its successor.'
+    deprecated: CircularJSON is in maintenance only, flatted is its successor.
     dev: true
     resolution:
       integrity: sha512-UZK3NBx2Mca+b5LsG7bY183pHWt5Y1xts4P3Pz7ENTwGVnJOUWbRb3ocjvX7hx9tq/yTAdclXm9sZ38gNuem4A==
@@ -3997,7 +3997,7 @@ packages:
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
       uuid: 3.4.0
-    deprecated: 'request has been deprecated, see https://github.com/request/request/issues/3142'
+    deprecated: request has been deprecated, see https://github.com/request/request/issues/3142
     engines:
       node: '>= 6'
     resolution:
@@ -4193,17 +4193,17 @@ packages:
     dev: true
     resolution:
       integrity: sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==
-  /sinon/9.2.3:
+  /sinon/9.2.4:
     dependencies:
       '@sinonjs/commons': 1.8.1
       '@sinonjs/fake-timers': 6.0.1
-      '@sinonjs/samsam': 5.3.0
+      '@sinonjs/samsam': 5.3.1
       diff: 4.0.2
       nise: 4.0.4
       supports-color: 7.1.0
     dev: true
     resolution:
-      integrity: sha512-m+DyAWvqVHZtjnjX/nuShasykFeiZ+nPuEfD4G3gpvKGkXRhkF/6NSt2qN2FjZhfrcHXFzUzI+NLnk+42fnLEw==
+      integrity: sha512-zljcULZQsJxVra28qIAL6ow1Z9tpattkCTEJR4RBP3TGc00FcttsP5pK284Nas5WjMZU5Yzy3kAIp3B3KRf5Yg==
   /slice-ansi/1.0.0:
     dependencies:
       is-fullwidth-code-point: 2.0.0
@@ -5203,7 +5203,7 @@ specifiers:
   npm-lifecycle: 2.1.1
   nyc: 15.1.0
   resolve-from: ^5.0.0
-  sinon: 9.2.3
+  sinon: 9.2.4
   slide: ^1.1.6
   standard: 12.0.1
   standard-version: 9.1.0
