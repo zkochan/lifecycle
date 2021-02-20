@@ -85,7 +85,7 @@ function lifecycle (pkg, stage, wd, opts) {
         const env = makeEnv(pkg, opts)
         env.npm_lifecycle_event = stage
         env.npm_node_execpath = env.NODE = env.NODE || process.execPath
-        env.npm_execpath = require.main.filename
+        env.npm_execpath = require.main ? require.main.filename : process.cwd()
         env.INIT_CWD = process.cwd()
         env.npm_config_node_gyp = env.npm_config_node_gyp || DEFAULT_NODE_GYP_PATH
         if (opts.extraEnv) {
