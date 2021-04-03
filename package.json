@@ -1,6 +1,6 @@
 {
   "name": "@zkochan/npm-lifecycle",
-  "version": "4.2.1",
+  "version": "5.0.0-0",
   "description": "JavaScript package lifecycle hook runner",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   "author": "Mike Sherov",
   "license": "Artistic-2.0",
   "engines": {
-    "node": ">=10.19"
+    "node": ">=12.17"
   },
   "bugs": {
     "url": "https://github.com/npm/lifecycle/issues"
