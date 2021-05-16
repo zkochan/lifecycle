@@ -85,7 +85,14 @@ function lifecycle (pkg, stage, wd, opts) {
         const env = makeEnv(pkg, opts)
         env.npm_lifecycle_event = stage
         env.npm_node_execpath = env.NODE = env.NODE || process.execPath
-        env.npm_execpath = require.main ? require.main.filename : process.cwd()
+        if (process.pkg != null) {
+          // If the pnpm CLI was bundled by vercel/pkg then we cannot use the js path for npm_execpath
+          // because in that case the js is in a virtual filesystem inside the executor.
+          // Instead, we use the path to the exe file.
+          env.npm_execpath = process.execPath
+        } else {
+          env.npm_execpath = require.main ? require.main.filename : process.cwd()
+        }
         env.INIT_CWD = process.cwd()
         env.npm_config_node_gyp = env.npm_config_node_gyp || DEFAULT_NODE_GYP_PATH
         if (opts.extraEnv) {
